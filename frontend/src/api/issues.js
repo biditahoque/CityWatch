@@ -1,6 +1,19 @@
 // src/api/issues.js
 import { supabase } from './supabase';
 
+/** EMAIL ALERTS: small helper to call the Edge Function and ignore failures */
+async function notifyEmail(action, payload) {
+  try {
+    await supabase.functions.invoke('alerts', {
+      method: 'POST',
+      body: { action, ...payload },
+    });
+  } catch (err) {
+    // Keep UI snappy; log and continue
+    console.warn('[alerts]', action, err?.message || err);
+  }
+}
+
 // List issues for the map (Step 6)
 export async function listIssues() {
   const { data, error } = await supabase
@@ -46,6 +59,15 @@ export async function createIssue({ userId, title, type, description, city, lat,
 
   const { data, error } = await supabase.from('issues').insert(payload).select().single();
   if (error) throw error;
+
+  // EMAIL ALERTS: fire-and-forget notification for NEW issue
+  notifyEmail('notify-new', {
+    city,
+    issueId: data.id,
+    title: data.title,
+    type: data.type,
+  });
+
   return data;
 }
 
@@ -59,6 +81,16 @@ export async function resolveIssue(issueId) {
     .single();
 
   if (error) throw error;
+
+  // EMAIL ALERTS: fire-and-forget notification for RESOLVED issue.
+  // used returned row to get city/title/type reliably.
+  notifyEmail('notify-resolved', {
+    city: data.city,
+    issueId: data.id,
+    title: data.title,
+    type: data.type,
+  });
+
   return data; // returns the updated row
 }
 

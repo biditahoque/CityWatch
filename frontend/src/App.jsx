@@ -6,6 +6,9 @@ import AuthPage from './pages/AuthPage';
 import MapPage from './pages/MapPage';
 import NewIssuePage from './pages/NewIssuePage';
 import IssueDetail from './pages/IssueDetail';
+import EmailVerified from './pages/EmailVerified';
+import AlertsPage from './pages/AlertsPage';
+
 
 export default function App() {
   const [user, setUser] = useState(undefined); // undefined=loading, null=logged out
@@ -30,8 +33,9 @@ export default function App() {
           <Route path="/" element={<MapPage />} />
           <Route path="/new" element={<NewIssuePage />} />
           <Route path="/issue/:id" element={<IssueDetail />} />
+          <Route path="/alerts" element={<AlertsPage />} />
+          <Route path="/email-verified" element={<EmailVerified />} />
           <Route path="*" element={<Navigate to="/" />} />
-	  <Route path="/" element={<MapPage />} />
         </Routes>
       ) : (
         <AuthPage />

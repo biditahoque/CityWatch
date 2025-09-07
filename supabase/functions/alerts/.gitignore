@@ -1,0 +1,19 @@
+# --- ENV files ---
+.env
+.env.local
+.env.*.local
+*.env
+*.env.local
+
+# Per-folder envs
+frontend/.env
+frontend/.env.*
+supabase/.env
+supabase/.env.*
+supabase/functions/**/.env
+supabase/functions/**/.env.*
+
+# Keep examples (safe placeholders)
+!.env.example
+!**/.env.example
+

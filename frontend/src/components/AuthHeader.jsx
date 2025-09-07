@@ -30,6 +30,7 @@ export default function AuthHeader() {
     // user state will clear via onAuthStateChange
   };
 
+
   return (
     <header
       style={{
@@ -57,6 +58,9 @@ export default function AuthHeader() {
             <button type="button" onClick={handleSignOut} style={{ marginLeft: 8 }}>
               Sign out
             </button>
+            <Link to="/alerts" style={{ marginLeft: 8 }}>
+              Email alerts
+            </Link>
           </>
         ) : (
           <>Not logged in</>
